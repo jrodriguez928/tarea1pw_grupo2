@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Calcular Números</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        .navbar-brand {
+            color: #0056b3;
+        }
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">📊 Calcular Números</span>
+        </div>
+    </nav>
+
+    <div class="mt-5">
+        <form id="numberForm" class="row g-3">
+            <div class="col-auto">
+                <label for="inputNumber" class="visually-hidden">Número</label>
+                <input type="number" class="form-control" id="inputNumber" placeholder="Ingrese un número">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary mb-3">Agregar Número</button>
+            </div>
+        </form>
+
+        <ul id="numberList" class="list-group mt-3"></ul>
+    </div>
+
+    <div>
+        <form action="ServletNumeros" method="post" onsubmit="return agregarNumerosAlFormulario()">
+            <select id="actionSelect" name="actionSelect" class="form-select mt-3 mb-3" aria-label="Seleccione una acción">
+            <option value="" selected disabled>¿Qué quieres hacer con estos números?</option>
+                <option value="1">Encontrar el mayor de 3 números enteros.</option>
+                <option value="2">Encontrar el menor de 3 números enteros.</option>
+                <option value="3">Encontrar el valor que más se repite de “n” cantidad de números enteros.</option>
+            </select>
+
+            <div id="hiddenInputs"></div>
+
+            <button type="submit" class="btn btn-success mb-5">Ejecutar</button>
+        </form>
+    </div>
+    <a href="index.html" class="back-link">Volver al Menú Principal</a>
+</div>
+
+
+
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const numeros = [];
+        const form = document.getElementById('numberForm');
+        const input = document.getElementById('inputNumber');
+        const list = document.getElementById('numberList');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const valor = parseFloat(input.value);
+
+            if (isNaN(valor)) {
+                alert("Por favor ingresa un número válido.");
+                return;
+            }
+
+            if (numeros.length >= 3) {
+                alert("Solo puedes ingresar hasta 3 números.");
+                return;
+            }
+
+            numeros.push(valor);
+            actualizarLista();
+            input.value = '';
+            input.focus();
+        });
+
+        function actualizarLista() {
+            list.innerHTML = '';
+
+            numeros.forEach((numero, index) => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                li.textContent = numero;
+                const btnEliminar = document.createElement('button');
+                btnEliminar.className = 'btn btn-sm btn-danger';
+                btnEliminar.textContent = 'Eliminar';
+                btnEliminar.onclick = () => {
+                    numeros.splice(index, 1);
+                    actualizarLista();
+                };
+
+                li.appendChild(btnEliminar);
+                list.appendChild(li);
+            });
+        }
+
+        window.agregarNumerosAlFormulario = function() {
+            const select = document.getElementById('actionSelect');
+            if (select.value === "") {
+                alert("Por favor selecciona una acción.");
+                return false;
+            }
+
+            // La lógica del servlet espera 3 números para las opciones 1 y 2.
+            // Para la opción 3 (más repetido), puede ser 'n' cantidad.
+            // Ajustamos la validación aquí para que sea más flexible o específica según la opción.
+            if (select.value === "1" || select.value === "2") {
+                if (numeros.length !== 3) {
+                    alert("Para esta opción, debes ingresar exactamente 3 números.");
+                    return false;
+                }
+            } else if (select.value === "3") {
+                if (numeros.length === 0) {
+                    alert("Debes ingresar al menos un número para encontrar el más repetido.");
+                    return false;
+                }
+            }
+
+
+            const contenedor = document.getElementById('hiddenInputs');
+            contenedor.innerHTML = '';
+
+            numeros.forEach(num => {
+                const inputHidden = document.createElement('input');
+                inputHidden.type = 'hidden';
+                inputHidden.name = 'numeros';
+                inputHidden.value = num;
+                contenedor.appendChild(inputHidden);
+            });
+
+            return true;
+        }
+    });
+</script>
+
+</body>
+</html>
