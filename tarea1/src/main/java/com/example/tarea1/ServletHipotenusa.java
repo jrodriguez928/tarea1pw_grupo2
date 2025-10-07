@@ -12,7 +12,6 @@ import java.lang.Math;
 @WebServlet(name = "ServletHipotenusa", value = "/ServletHipotenusa")
 public class ServletHipotenusa extends HttpServlet {
 
-    // Información de los desarrolladores
     private static final String DEVELOPER_NAME_1 = "José Tomás Izaguirre";
     private static final String ACCOUNT_NUMBER_1 = "202320010064";
     private static final String DEVELOPER_NAME_2 = "Joseph Stalyn Rodriguez Inestroza";

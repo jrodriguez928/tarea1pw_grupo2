@@ -14,11 +14,10 @@ public class ConversorServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    // Información de los desarrolladores
-    private static final String DEVELOPER_NAME_1 = "Darwin R. Oliva";
-    private static final String ACCOUNT_NUMBER_1 = "202110020297";
-    private static final String DEVELOPER_NAME_2 = "Merari Abigail Valle"; // Segundo nombre
-    private static final String ACCOUNT_NUMBER_2 = "202410060982"; // Segundo número de cuenta
+    private static final String DEVELOPER_NAME_1 = "Lisbeth Gabriela Martínez Martínez";
+    private static final String ACCOUNT_NUMBER_1 = "202410060974";
+    private static final String DEVELOPER_NAME_2 = "Anyi Nicool Reyes Pérez";
+    private static final String ACCOUNT_NUMBER_2 = "202410060967";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
